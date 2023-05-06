@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+
+  web:
+    build:
+      context: ./fitnessmanager_api
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=${SECRETKEY}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fitnessmanager_api:/app/
+    depends_on:
+      - db
+
+volumes:
+  db_data:
