@@ -1,7 +1,4 @@
-import random
-import string
-
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -13,44 +10,54 @@ PAID_MONTH_CHOICES = [(i, str(i)) for i in range(1, 13)]
 PAID_YEAR_CHOICES = [(i, str(i)) for i in range(2023, 2043)]
 
 
+class CustomerManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
+
+
 def generate_password():
-    chars = string.ascii_letters + string.digits
-    plain_password = ''.join(random.choice(chars) for _ in range(6))
-    # todo Implement sending temp password via email and asking for new one
-    print(plain_password)
-    return hash_password(plain_password)
+    return "legacy"
 
 
-def hash_password(plain_password):
-    hashed_password = make_password(plain_password)
-    return hashed_password
-
-
-class Customer(models.Model):
-    first_name = models.CharField(max_length=255, verbose_name=_("First Name"))
-    last_name = models.CharField(max_length=255, verbose_name=_("Last Name"))
-    date_of_birth = models.DateField(verbose_name=_("Date of Birth"))
-    address = models.CharField(max_length=255, verbose_name=_("Address"))
-    phone_number = models.CharField(max_length=20, verbose_name=_("Phone Number"))
-    email = models.EmailField(max_length=255, verbose_name=_("Email"))
+class Customer(AbstractUser):
+    date_of_birth = models.DateField(verbose_name=_("Date of Birth"), null=True)
+    address = models.CharField(max_length=255, verbose_name=_("Address"), null=True)
+    phone_number = models.CharField(max_length=20, verbose_name=_("Phone Number"), null=True)
     registration_date = models.DateTimeField(
-        auto_now_add=True, verbose_name=_("Registration Date")
+        auto_now_add=True, verbose_name=_("Registration Date"), null=True
     )
     active_membership = models.BooleanField(
-        default=False, verbose_name=_("Active Membership")
+        default=False, verbose_name=_("Active Membership"), null=True
     )
     membership_start_date = models.DateField(
-        null=True, blank=True, verbose_name=_("Membership Start Date")
+        null=True, blank=True, verbose_name=_("Membership Start Date"),
     )
     membership_end_date = models.DateField(
         null=True, blank=True, verbose_name=_("Membership End Date")
     )
-    notes = models.TextField(blank=True, verbose_name=_("Notes"))
+    notes = models.TextField(blank=True, verbose_name=_("Notes"), null=True)
     profile_picture = models.ImageField(
         upload_to="customer_profile_pictures",
         null=True,
         blank=True,
-        verbose_name=_("Profile Picture"),
+        verbose_name=_("Profile Picture")
     )
     passport_number = models.CharField(
         max_length=255, null=True, blank=True, verbose_name=_("Passport Number")
@@ -61,8 +68,13 @@ class Customer(models.Model):
     height = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True, verbose_name=_("Height")
     )
-    password = models.CharField(max_length=128, null=False, default=generate_password)
-    is_active = models.BooleanField(default=True)
+    username = None
+    email = models.EmailField(_('email address'), unique=True, max_length=255)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    objects = CustomerManager()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -96,7 +108,7 @@ class Payment(models.Model):
     paid_year = models.PositiveIntegerField(verbose_name=_('Paid Year'), choices=PAID_YEAR_CHOICES)
 
     def __str__(self):
-        return f"Pago {self.customer.first_name} {self.customer.last_name} - {self.date}"
+        return f"Pago {self.user.first_name} {self.user.last_name} - {self.date}"
 
     class Meta:
         verbose_name = _("Payment")

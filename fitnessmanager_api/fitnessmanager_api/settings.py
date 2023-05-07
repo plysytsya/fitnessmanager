@@ -54,12 +54,6 @@ REST_FRAMEWORK = {
 }
 
 
-AUTHENTICATION_BACKENDS = [
-    "fitnessmanager_api.backends.CustomerBackend",
-    "django.contrib.auth.backends.ModelBackend",
-]
-
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
@@ -114,6 +108,11 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'fitnessmanager_api.Customer'
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -168,4 +167,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/files")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_CHARSET = "utf-8"
 
-GRAPPELLI_ADMIN_TITLE = "Fitnessmanager"
+GRAPPELLI_ADMIN_TITLE = "FitPuerta"

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
+
 from .models import Customer, Payment
 
 
@@ -11,8 +12,10 @@ class PaymentInline(admin.TabularInline):
 
 
 class CustomerAdmin(admin.ModelAdmin):
+    model = Customer
+
     inlines = [PaymentInline]
-    exclude = ("password", "is_active",)
+    exclude = ("password", "is_active", "groups", "user_permissions")
 
     list_display = (
         "first_name",
