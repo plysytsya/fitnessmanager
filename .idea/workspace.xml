@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79d1c379-839b-44d0-8f1c-efc074a1545e" name="Changes" comment="implements custom authentication">
+    <list default="true" id="79d1c379-839b-44d0-8f1c-efc074a1545e" name="Changes" comment="moves customer into user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/backends.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0002_alter_customer_options_customer_profile_picture_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0003_alter_customer_profile_picture.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0004_customer_amount_paid_customer_discount_percent_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0005_alter_customer_amount_paid_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0006_alter_customer_last_payment_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0007_remove_customer_membership_cancellation_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0008_remove_customer_amount_paid_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0009_alter_payment_options_alter_payment_date_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0010_alter_payment_options.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0011_alter_customer_options.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0012_alter_payment_customer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0013_alter_customer_options_alter_payment_paid_month_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0014_customer_password.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/migrations/0015_customer_is_active_alter_customer_password.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitnessmanager_api/fitnessmanager_api/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +86,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683417785285</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="moves customer into user">
+      <created>1683468988571</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1683468988571</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,6 +112,7 @@
     <MESSAGE value="updates env vars and gitignore" />
     <MESSAGE value="adds server to allowed hosts" />
     <MESSAGE value="implements custom authentication" />
-    <option name="LAST_COMMIT_MESSAGE" value="implements custom authentication" />
+    <MESSAGE value="moves customer into user" />
+    <option name="LAST_COMMIT_MESSAGE" value="moves customer into user" />
   </component>
 </project>
