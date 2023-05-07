@@ -1,3 +1,7 @@
+import random
+import string
+
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -7,6 +11,19 @@ PAID_MONTH_CHOICES = [(i, str(i)) for i in range(1, 13)]
 
 # define the choices for the paid_year field
 PAID_YEAR_CHOICES = [(i, str(i)) for i in range(2023, 2043)]
+
+
+def generate_password():
+    chars = string.ascii_letters + string.digits
+    plain_password = ''.join(random.choice(chars) for _ in range(6))
+    # todo Implement sending temp password via email and asking for new one
+    print(plain_password)
+    return hash_password(plain_password)
+
+
+def hash_password(plain_password):
+    hashed_password = make_password(plain_password)
+    return hashed_password
 
 
 class Customer(models.Model):
@@ -44,6 +61,8 @@ class Customer(models.Model):
     height = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True, verbose_name=_("Height")
     )
+    password = models.CharField(max_length=128, null=False, default=generate_password)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

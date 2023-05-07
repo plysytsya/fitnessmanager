@@ -12,6 +12,7 @@ class PaymentInline(admin.TabularInline):
 
 class CustomerAdmin(admin.ModelAdmin):
     inlines = [PaymentInline]
+    exclude = ("password", "is_active",)
 
     list_display = (
         "first_name",
