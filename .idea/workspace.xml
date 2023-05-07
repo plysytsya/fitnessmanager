@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79d1c379-839b-44d0-8f1c-efc074a1545e" name="Changes" comment="moves customer into user">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="79d1c379-839b-44d0-8f1c-efc074a1545e" name="Changes" comment="recompiles language file" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -93,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683468988571</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="recompiles language file">
+      <created>1683471676566</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1683471676566</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -113,6 +118,7 @@
     <MESSAGE value="adds server to allowed hosts" />
     <MESSAGE value="implements custom authentication" />
     <MESSAGE value="moves customer into user" />
-    <option name="LAST_COMMIT_MESSAGE" value="moves customer into user" />
+    <MESSAGE value="recompiles language file" />
+    <option name="LAST_COMMIT_MESSAGE" value="recompiles language file" />
   </component>
 </project>

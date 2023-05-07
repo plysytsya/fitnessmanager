@@ -21,5 +21,8 @@ COPY . /app/
 # Expose port 8000
 EXPOSE 8000
 
+RUN apt-get update && apt-get install -y gettext
+RUN django-admin compilemessages
+
 # Start the server using Gunicorn
 CMD gunicorn --bind 0.0.0.0:8000 --chdir /app/fitnessmanager_api fitnessmanager.wsgi:application
