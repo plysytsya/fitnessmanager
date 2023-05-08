@@ -1,11 +1,16 @@
-# views.py
-
 from django.http import JsonResponse
 from django.utils.translation import activate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from .models import Customer
+
+
+def translate_boolean(value, language):
+    if language == "es":
+        return "si" if value else "no"
+    else:  # default to English
+        return "yes" if value else "no"
 
 
 class GetCustomerData(APIView):
@@ -47,7 +52,12 @@ class GetCustomerData(APIView):
                     key = field_name
                 else:
                     key = str(Customer._meta.get_field(field_name).verbose_name)
-                translated_data[key] = data[field_name]
+                    key = key[0].upper() + key[1:]  # capitalize
+
+                value = data[field_name]
+                if isinstance(value, bool):
+                    value = translate_boolean(value, language)
+                translated_data[key] = value if value else " - "
 
             translated_customer_data.append(translated_data)
 
