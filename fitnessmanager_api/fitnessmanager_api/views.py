@@ -1,5 +1,8 @@
+import datetime
+
 from django.http import JsonResponse
 from django.utils.translation import activate
+from django.utils import formats
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -57,6 +60,11 @@ class GetCustomerData(APIView):
                 value = data[field_name]
                 if isinstance(value, bool):
                     value = translate_boolean(value, language)
+                elif isinstance(value, (datetime.date, datetime.datetime)):
+
+                    date_format = "Y-m-d" if language == "en" else "d.m.Y"
+                    value = formats.date_format(value, format=date_format, use_l10n=True)
+
                 translated_data[key] = value if value else " - "
 
             translated_customer_data.append(translated_data)
