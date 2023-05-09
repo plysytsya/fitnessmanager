@@ -5,6 +5,8 @@ from django.utils.translation import activate
 from django.utils import formats
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from django.http import HttpResponse
+from PIL import Image, ImageOps, ImageDraw
 
 from .models import Customer
 
@@ -70,3 +72,51 @@ class GetCustomerData(APIView):
             translated_customer_data.append(translated_data)
 
         return JsonResponse({"customer_data": translated_customer_data})
+
+
+class GetProfilePicture(APIView):
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
+    def get(self, request, *args, **kwargs):
+        as_thumbnail = request.GET.get("as_thumbnail", "false").lower() == "true"
+        shape = request.GET.get("shape", "original")
+
+        customer = request.user
+        profile_picture_path = customer.profile_picture.path
+        img = Image.open(profile_picture_path)
+
+        if as_thumbnail:
+            img.thumbnail((128, 128))
+
+        if shape == "oval":
+            img = self.make_oval_image(img)
+        elif shape == "round":
+            img = self.make_round_image(img)
+
+        response = HttpResponse(content_type="image/png")  # Change the content type to image/png
+        img.save(response, "PNG")  # Save the image as PNG instead of JPEG
+
+        return response
+
+    @staticmethod
+    def make_oval_image(img):
+        size = (img.width, img.height)
+        mask = Image.new("L", size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0) + size, fill=255)
+        output = ImageOps.fit(img, mask.size, centering=(0.5, 0.5))
+        output.putalpha(mask)
+        return output
+
+    @staticmethod
+    def make_round_image(img):
+        size = min(img.width, img.height)
+        mask = Image.new("L", (size, size), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0, size, size), fill=255)
+        output = ImageOps.fit(img, mask.size, centering=(0.5, 0.5))
+        output.putalpha(mask)
+        return output
+
