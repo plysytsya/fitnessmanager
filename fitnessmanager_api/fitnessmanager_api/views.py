@@ -62,6 +62,7 @@ class CustomerData(APIView):
         customer = request.user
 
         for key, value in customer_data.items():
+            print("updating", key, "to be",  value)
             field_name = _get_field_name_from_key(key, language)
 
             if not _is_key_editable(field_name):
