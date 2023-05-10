@@ -1,5 +1,6 @@
 import datetime
 
+import dateutil.parser
 from django.http import JsonResponse
 from django.utils.translation import activate
 from django.utils import formats
@@ -68,6 +69,9 @@ class CustomerData(APIView):
                 continue
 
             if hasattr(customer, field_name):
+
+                if customer._meta.get_field(field_name).get_internal_type() == "DateField":
+                    value = dateutil.parser.parse(value).date()
                 setattr(customer, field_name, value)
 
         customer.save()
