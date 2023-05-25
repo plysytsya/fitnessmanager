@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 
-from .models import Customer, Payment
+from .models import Message, MessageContent, Customer, Payment
 
 
 class PaymentInline(admin.TabularInline):
@@ -63,5 +63,18 @@ class PaymentAdmin(admin.ModelAdmin):
     )
 
 
+class MessageContentInline(admin.TabularInline):
+    model = MessageContent
+    extra = 0
+
+
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'receiver', 'subject', 'sent_at', 'read_at', 'is_read', 'is_impression')
+    search_fields = ('sender__username', 'receiver__username', 'subject')
+    inlines = [MessageContentInline]
+
+
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Payment, PaymentAdmin)
+admin.site.register(Message, MessageAdmin)
+

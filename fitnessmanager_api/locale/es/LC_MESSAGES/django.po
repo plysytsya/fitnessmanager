@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: myapp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 17:00+0200\n"
+"POT-Creation-Date: 2023-05-25 21:53+0200\n"
 "PO-Revision-Date: 2022-04-29 12:00+0100\n"
 "Last-Translator: Pavlo Lysytsya <pavlo.lysytsya@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,6 +117,18 @@ msgstr ""
 #: templates/admin/login.html:3
 msgid "Fitnessmanager administration"
 msgstr "Fitnessmanager"
+
+#~ msgid "Message"
+#~ msgstr "Mensaje"
+
+#~ msgid "Messages"
+#~ msgstr "Mensajes"
+
+#~ msgid "Message contents"
+#~ msgstr "Textos de mensaje"
+
+#~ msgid "Message content"
+#~ msgstr "Texto de mensaje"
 
 #~ msgid "Fitnessmanager_Api"
 #~ msgstr "Fitnessmanager"

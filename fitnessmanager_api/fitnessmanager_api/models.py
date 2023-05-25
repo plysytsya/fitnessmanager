@@ -113,3 +113,25 @@ class Payment(models.Model):
     class Meta:
         verbose_name = _("Payment")
         verbose_name_plural = _("Payments")
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(Customer, related_name='sent_messages', on_delete=models.CASCADE, null=True)
+    receiver = models.ForeignKey(Customer, related_name='received_messages', on_delete=models.CASCADE, null=True)
+    subject = models.CharField(max_length=2048, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    is_draft = models.BooleanField(default=True)
+    sent_at = models.DateTimeField(null=True, auto_now_add=False, blank=True)
+    read_at = models.DateTimeField(null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    is_impression = models.BooleanField(default=False)
+
+
+class MessageContent(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    is_html = models.BooleanField(default=False)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+
