@@ -22,16 +22,20 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from django.urls import re_path
-from .views import CustomerData, GetProfilePicture
+from .views import customer_views, message_views
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),  # grappelli URLS
     path("admin/", admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path("api/profile_picture/", GetProfilePicture.as_view(), name="profile_picture"),
-    re_path(r'^customer-data/?$', CustomerData.as_view(), name='customer_data'),
-
+    path("api/profile_picture/", customer_views.GetProfilePicture.as_view(), name="profile_picture"),
+    re_path(r'^customer-data/?$', customer_views.CustomerData.as_view(), name='customer_data'),
+    path('messages/customer/unread_count/', message_views.UnreadMessageCountView.as_view()),
+    path('messages/customer/sent/', message_views.SentMessageView.as_view()),
+    path('messages/customer/inbox/', message_views.InboxView.as_view()),
+    path('messages/send/', message_views.SendMessageView.as_view()),
+    path('conversations/<int:conversation_id>/', message_views.ConversationView.as_view()),
 ]
 
 

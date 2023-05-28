@@ -10,8 +10,7 @@ from django.http import HttpResponse
 from PIL import Image, ImageOps, ImageDraw
 from django.db.models.fields.reverse_related import ManyToOneRel
 
-
-from .models import Customer
+from ..models import Customer
 
 
 def translate_boolean(value, language):
@@ -128,7 +127,6 @@ def _get_field_name_from_key(key, language):
         if translated_key == key:
             return field.name
     return None
-
 
 
 def _get_value_and_type(value, language):
