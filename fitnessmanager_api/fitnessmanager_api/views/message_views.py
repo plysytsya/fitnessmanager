@@ -3,9 +3,26 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 
 from ..models import Message, MessageContent, Customer, Conversation
 from ..serializers import MessageSerializer, ConversationSerializer
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 3  # Number of items per page
+    page_size_query_param = "page_size"
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response(
+            {
+                "count": self.page.paginator.count,
+                "num_pages": self.page.paginator.num_pages,
+                "results": data,
+                "next": self.get_next_link(),
+            }
+        )
 
 
 class UnreadMessageCountView(APIView):
@@ -49,17 +66,18 @@ class InboxView(APIView):
 
     def get(self, request):
         user = request.user
-        unread_messages = Message.objects.filter(
+        incoming_messages = Message.objects.filter(
             receiver=user,
             is_deleted_by_sender=False,
             is_deleted_by_recepient=False,
             is_draft=False,
-            sent_at__isnull=False
+            sent_at__isnull=False,
         )
 
-        serialized_messages = MessageSerializer(unread_messages, many=True)
-
-        return Response({"unread_messages": serialized_messages.data})
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(incoming_messages, request)
+        serialized_messages = MessageSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serialized_messages.data)
 
 
 class SendMessageView(APIView):
@@ -76,7 +94,9 @@ class SendMessageView(APIView):
 
 
 class ConversationView(APIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def get(self, request, conversation_id):
         conversation = get_object_or_404(Conversation, id=conversation_id)

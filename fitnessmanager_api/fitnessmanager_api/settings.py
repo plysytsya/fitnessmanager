@@ -55,8 +55,8 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=2),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=365 * 20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365 * 20),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
@@ -71,6 +71,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "fitnessmanager_api.charset_middleware.CharsetMiddleware",
 ]
 
 ROOT_URLCONF = "fitnessmanager_api.urls"
@@ -108,7 +109,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'fitnessmanager_api.Customer'
+AUTH_USER_MODEL = "fitnessmanager_api.Customer"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

@@ -16,12 +16,18 @@ class MessageContentSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    sender_first_name = serializers.ReadOnlyField(source='sender.first_name')
+    sender_last_name = serializers.ReadOnlyField(source='sender.last_name')
+    sender_email = serializers.ReadOnlyField(source='sender.email')
     messagecontent_set = MessageContentSerializer(many=True)
 
     class Meta:
         model = Message
         fields = [
             "sender",
+            "sender_first_name",
+            "sender_last_name",
+            "sender_email",
             "receiver",
             "subject",
             "created_at",
