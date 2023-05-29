@@ -115,17 +115,7 @@ class Payment(models.Model):
         verbose_name_plural = _("Payments")
 
 
-class Conversation(models.Model):
-    participants = models.ManyToManyField(Customer)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Conversation {self.id}"
-
-
 class Message(models.Model):
-    conversation = models.ForeignKey(Conversation, related_name='messages', on_delete=models.CASCADE, null=True)
     sender = models.ForeignKey(Customer, related_name='sent_messages', on_delete=models.CASCADE, null=True)
     receiver = models.ForeignKey(Customer, related_name='received_messages', on_delete=models.CASCADE, null=True)
     subject = models.CharField(max_length=2048, null=True, blank=True)
@@ -149,4 +139,3 @@ class MessageContent(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     is_html = models.BooleanField(default=False)
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
-

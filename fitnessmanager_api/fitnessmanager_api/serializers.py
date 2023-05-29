@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import (
     Message,
     MessageContent,
-    Conversation
 )
 
 
@@ -16,6 +15,8 @@ class MessageContentSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    message_id = serializers.ReadOnlyField(source='id')  # Add this line
+
     sender_first_name = serializers.ReadOnlyField(source='sender.first_name')
     sender_last_name = serializers.ReadOnlyField(source='sender.last_name')
     sender_email = serializers.ReadOnlyField(source='sender.email')
@@ -24,6 +25,7 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = [
+            "message_id",  # Include the message ID field
             "sender",
             "sender_first_name",
             "sender_last_name",
@@ -47,11 +49,3 @@ class MessageSerializer(serializers.ModelSerializer):
         for message_content in message_contents:
             MessageContent.objects.create(message=message, **message_content)
         return message
-
-
-class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Conversation
-        fields = ['id', 'participants', 'messages']

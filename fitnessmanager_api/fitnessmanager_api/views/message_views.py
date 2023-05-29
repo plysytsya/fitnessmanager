@@ -1,16 +1,19 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.shortcuts import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
+from typing import Optional
 
-from ..models import Message, MessageContent, Customer, Conversation
-from ..serializers import MessageSerializer, ConversationSerializer
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ..models import Message
+from ..serializers import MessageSerializer
 
 
 class CustomPagination(PageNumberPagination):
-    page_size = 3  # Number of items per page
+    page_size = 10  # Number of items per page
     page_size_query_param = "page_size"
     max_page_size = 100
 
@@ -21,6 +24,7 @@ class CustomPagination(PageNumberPagination):
                 "num_pages": self.page.paginator.num_pages,
                 "results": data,
                 "next": self.get_next_link(),
+                "current_page": self.page.number,
             }
         )
 
@@ -72,7 +76,7 @@ class InboxView(APIView):
             is_deleted_by_recepient=False,
             is_draft=False,
             sent_at__isnull=False,
-        )
+        ).order_by("-sent_at")
 
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(incoming_messages, request)
@@ -93,17 +97,84 @@ class SendMessageView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ConversationView(APIView):
-    permission_classes = [
-        IsAuthenticated,
-    ]
+class MessageDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, conversation_id):
-        conversation = get_object_or_404(Conversation, id=conversation_id)
+    def get(self, request: Request, message_id: int) -> Response:
+        """
+        Retrieve details of a specific message.
 
-        # Check if the user is a participant of the conversation
-        if request.user not in conversation.participants.all():
-            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        :param request: HTTP request from the client.
+        :param message_id: ID of the message.
+        :return: HTTP response with the details of the message.
+        """
+        message = get_object_or_404(Message, id=message_id, receiver=request.user)
+        serialized_message = MessageSerializer(message)
+        return Response(serialized_message.data)
 
-        serializer = ConversationSerializer(conversation)
-        return Response(serializer.data)
+    def put(self, request: Request, message_id: int) -> Response:
+        """
+        Modify a specific message.
+
+        :param request: HTTP request from the client.
+        :param message_id: ID of the message.
+        :return: HTTP response with the modified message or error message.
+        """
+        message = get_object_or_404(Message, id=message_id)
+
+        if request.user == message.sender:
+            response = self._handle_sender_modification(request, message)
+        elif request.user == message.receiver:
+            response = self._handle_receiver_modification(request, message)
+        else:
+            response = Response(
+                {"detail": "You are not allowed to modify this message."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if response:
+            return response
+
+        serializer = MessageSerializer(message, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def _handle_sender_modification(request: Request, message: Message) -> Optional[Response]:
+        """
+        Handle modification request from the sender.
+
+        :param request: HTTP request from the client.
+        :return: HTTP response with error message if sender tries to modify 'is_read' or 'is_impression',
+        None otherwise.
+        """
+        if request.user == message.receiver:  # sent to himself
+            return None
+        if "is_read" in request.data or "is_impression" in request.data:
+            return Response(
+                {"detail": "Only the receiver can modify is_read or is_impression."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return None
+
+    @staticmethod
+    def _handle_receiver_modification(request: Request, message: Message) -> Optional[Response]:
+        """
+        Handle modification request from the receiver.
+
+        :param request: HTTP request from the client.
+        :return: HTTP response with error message if receiver tries to modify fields other than
+        'is_read' and 'is_impression', None otherwise.
+        """
+        if request.user == message.sender:  # sent to himself
+            return None
+        if any(key not in ["is_read", "is_impression"] for key in request.data.keys()):
+            return Response(
+                {
+                    "detail": "You are only allowed to modify 'is_read' and 'is_impression'"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return None

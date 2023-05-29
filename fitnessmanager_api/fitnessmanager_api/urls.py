@@ -34,8 +34,9 @@ urlpatterns = [
     path('messages/customer/unread_count/', message_views.UnreadMessageCountView.as_view()),
     path('messages/customer/sent/', message_views.SentMessageView.as_view()),
     path('messages/customer/inbox/', message_views.InboxView.as_view()),
-    path('messages/send/', message_views.SendMessageView.as_view()),
-    path('conversations/<int:conversation_id>/', message_views.ConversationView.as_view()),
+    path('messages/customer/<int:message_id>/', message_views.MessageDetailView.as_view()),
+    path('messages/customer/send/', message_views.SendMessageView.as_view()),
+
 ]
 
 
