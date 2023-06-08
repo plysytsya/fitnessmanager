@@ -141,7 +141,7 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 
 LANGUAGES = [
@@ -170,4 +170,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/files")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_CHARSET = "utf-8"
 
-GRAPPELLI_ADMIN_TITLE = "FitPuerta"
+GRAPPELLI_ADMIN_TITLE = "Fitness Manager Systems"

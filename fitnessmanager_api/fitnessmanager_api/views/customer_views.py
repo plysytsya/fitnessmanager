@@ -30,7 +30,8 @@ class CustomerData(APIView):
         activate(language)
         all_fields = request.GET.get("all", "false").lower() == "true"
 
-        customer_data = Customer.objects.values()
+        customer_id = request.user.id
+        customer_data = Customer.objects.filter(id=customer_id).values()
         translated_customer_data = []
 
         fields_to_return = _get_fields_to_return(all_fields)

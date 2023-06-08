@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -100,7 +101,7 @@ class SendMessageView(APIView):
 class MessageDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request, message_id: int) -> Response:
+    def get(self, request: Request, message_id: UUID) -> Response:
         """
         Retrieve details of a specific message.
 
@@ -112,7 +113,7 @@ class MessageDetailView(APIView):
         serialized_message = MessageSerializer(message)
         return Response(serialized_message.data)
 
-    def put(self, request: Request, message_id: int) -> Response:
+    def put(self, request: Request, message_id: UUID) -> Response:
         """
         Modify a specific message.
 

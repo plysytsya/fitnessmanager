@@ -25,10 +25,8 @@ class CustomerAdmin(admin.ModelAdmin):
         "email",
         "phone_number",
         "date_of_birth",
-        "membership_start_date",
         "notes",
         "payment_link",
-        "active_membership",
         "thumbnail",
     )
 
@@ -77,4 +75,3 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Message, MessageAdmin)
-

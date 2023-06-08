@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: myapp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 21:53+0200\n"
+"POT-Creation-Date: 2023-06-03 22:55+0200\n"
 "PO-Revision-Date: 2022-04-29 12:00+0100\n"
 "Last-Translator: Pavlo Lysytsya <pavlo.lysytsya@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,135 +12,156 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: fitnessmanager_api/admin.py:49
+#: fitnessmanager_api/admin.py:47
 msgid "View payments"
-msgstr "Mirar Pagos"
+msgstr "Ver pagos"
 
-#: fitnessmanager_api/admin.py:51 fitnessmanager_api/models.py:115
+#: fitnessmanager_api/admin.py:49 fitnessmanager_api/models.py:113
 msgid "Payments"
 msgstr "Pagos"
 
-#: fitnessmanager_api/models.py:40
+#: fitnessmanager_api/models.py:47
 msgid "Date of Birth"
 msgstr "Fecha de Nacimiento"
 
-#: fitnessmanager_api/models.py:41
+#: fitnessmanager_api/models.py:48
 msgid "Address"
 msgstr "Dirección"
 
-#: fitnessmanager_api/models.py:42
+#: fitnessmanager_api/models.py:49
 msgid "Phone Number"
 msgstr "Número de Teléfono"
 
-#: fitnessmanager_api/models.py:44
+#: fitnessmanager_api/models.py:51
 msgid "Registration Date"
 msgstr "Fecha de Registro"
 
-#: fitnessmanager_api/models.py:47
-msgid "Active Membership"
-msgstr "Membresía Activa"
-
-#: fitnessmanager_api/models.py:50
-msgid "Membership Start Date"
-msgstr "Fecha de Inicio de Membresía"
-
 #: fitnessmanager_api/models.py:53
-msgid "Membership End Date"
-msgstr "Fecha de Fin de Membresía"
-
-#: fitnessmanager_api/models.py:55
 msgid "Notes"
 msgstr "Notas"
 
-#: fitnessmanager_api/models.py:60
+#: fitnessmanager_api/models.py:58
 msgid "Profile Picture"
-msgstr "Foto"
+msgstr "Foto de Perfil"
 
-#: fitnessmanager_api/models.py:63
+#: fitnessmanager_api/models.py:61
 msgid "Passport Number"
-msgstr "DNI, NIE, N° de pasaporte"
+msgstr "Número de Pasaporte"
 
-#: fitnessmanager_api/models.py:66
+#: fitnessmanager_api/models.py:64
 msgid "Weight"
 msgstr "Peso"
 
-#: fitnessmanager_api/models.py:69
+#: fitnessmanager_api/models.py:67
 msgid "Height"
 msgstr "Altura"
 
-#: fitnessmanager_api/models.py:72
-#, fuzzy
-#| msgid "Address"
+#: fitnessmanager_api/models.py:70
 msgid "email address"
-msgstr "Dirección"
+msgstr "Dirección de correo electrónico"
 
-#: fitnessmanager_api/models.py:83 fitnessmanager_api/models.py:89
+#: fitnessmanager_api/models.py:81 fitnessmanager_api/models.py:90
 msgid "Customer"
 msgstr "Cliente"
 
-#: fitnessmanager_api/models.py:84
+#: fitnessmanager_api/models.py:82
 msgid "Customers"
 msgstr "Clientes"
 
-#: fitnessmanager_api/models.py:91
+#: fitnessmanager_api/models.py:92
 msgid "Payment Date"
-msgstr "Fecha del pago"
+msgstr "Fecha del Pago"
 
-#: fitnessmanager_api/models.py:97
+#: fitnessmanager_api/models.py:98
 msgid "Amount Paid"
 msgstr "Cantidad Pagada"
 
-#: fitnessmanager_api/models.py:104
+#: fitnessmanager_api/models.py:105
 msgid "Discount Percent"
 msgstr "Porcentaje de Descuento"
 
-#: fitnessmanager_api/models.py:106
+#: fitnessmanager_api/models.py:107
 msgid "Payment Method"
 msgstr "Método de Pago"
 
-#: fitnessmanager_api/models.py:107
+#: fitnessmanager_api/models.py:108
 msgid "Paid Month"
 msgstr "Mes Pagado"
 
-#: fitnessmanager_api/models.py:108
+#: fitnessmanager_api/models.py:109
 msgid "Paid Year"
 msgstr "Año Pagado"
 
-#: fitnessmanager_api/models.py:114
+#: fitnessmanager_api/models.py:112
 msgid "Payment"
 msgstr "Pago"
 
+#: fitnessmanager_api/models.py:133
+msgid "Message"
+msgstr "Mensaje"
+
+#: fitnessmanager_api/models.py:134
+msgid "Messages"
+msgstr "Mensajes"
+
+#: fitnessmanager_api/models.py:150
+msgid "Gym Name"
+msgstr "Nombre del Gimnasio"
+
+#: fitnessmanager_api/models.py:151
+msgid "Gym Address"
+msgstr "Dirección del Gimnasio"
+
+#: fitnessmanager_api/models.py:159
+msgid "Gym"
+msgstr "Gimnasio"
+
+#: fitnessmanager_api/models.py:160
+msgid "Gyms"
+msgstr "Gimnasios"
+
+#: fitnessmanager_api/models.py:187
+msgid "Room"
+msgstr "Sala"
+
+#: fitnessmanager_api/models.py:188
+msgid "Rooms"
+msgstr "Salas"
+
+#: fitnessmanager_api/models.py:204
+msgid "Course"
+msgstr "Curso"
+
+#: fitnessmanager_api/models.py:205
+msgid "Courses"
+msgstr "Cursos"
+
+#: fitnessmanager_api/models.py:220
+msgid "Course Schedule"
+msgstr "Horario del Curso"
+
+#: fitnessmanager_api/models.py:221
+msgid "Course Schedules"
+msgstr "Horarios de los Cursos"
+
+#: fitnessmanager_api/models.py:247
+msgid "Reservation"
+msgstr "Reserva"
+
+#: fitnessmanager_api/models.py:248
+msgid "Reservations"
+msgstr "Reservas"
+
 #: templates/admin/change_form.html:21
 msgid "No profile picture available."
-msgstr ""
+msgstr "No hay foto de perfil disponible."
 
 #: templates/admin/login.html:3
 msgid "Fitnessmanager administration"
-msgstr "Fitnessmanager"
+msgstr "Administración de Fitnessmanager"
 
-#~ msgid "Message"
-#~ msgstr "Mensaje"
+msgid "Course Instance"
+msgstr "Instancia del Curso"
 
-#~ msgid "Messages"
-#~ msgstr "Mensajes"
-
-#~ msgid "Message contents"
-#~ msgstr "Textos de mensaje"
-
-#~ msgid "Message content"
-#~ msgstr "Texto de mensaje"
-
-#~ msgid "Fitnessmanager_Api"
-#~ msgstr "Fitnessmanager"
-
-#~ msgid "First Name"
-#~ msgstr "Nombre"
-
-#~ msgid "Last Name"
-#~ msgstr "Apellido"
-
-#~ msgid "Email"
-#~ msgstr "Correo Electrónico"
-
-#~ msgid "Cliente"
-#~ msgstr "Cliente"
+msgid "Course Instances"
+msgstr "Instancias de los Cursos"

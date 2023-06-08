@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from django.urls import re_path
-from .views import customer_views, message_views
+from .views import customer_views, message_views, room_views, reservation_views
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),  # grappelli URLS
@@ -34,9 +34,12 @@ urlpatterns = [
     path('messages/customer/unread_count/', message_views.UnreadMessageCountView.as_view()),
     path('messages/customer/sent/', message_views.SentMessageView.as_view()),
     path('messages/customer/inbox/', message_views.InboxView.as_view()),
-    path('messages/customer/<int:message_id>/', message_views.MessageDetailView.as_view()),
+    path('messages/customer/<str:message_id>/', message_views.MessageDetailView.as_view()),
     path('messages/customer/send/', message_views.SendMessageView.as_view()),
-
+    path('courses/', reservation_views.CourseView.as_view(), name='courses'),
+    path('courses/<uuid:pk>/', reservation_views.CourseView.as_view(), name='single_course'),
+    path('rooms/', room_views.RoomView.as_view(), name='rooms'),
+    path('rooms/<uuid:pk>/', room_views.RoomView.as_view(), name='single_room'),
 ]
 
 

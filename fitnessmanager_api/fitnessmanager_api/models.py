@@ -1,3 +1,7 @@
+import calendar
+import uuid
+import datetime
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext as _
@@ -37,20 +41,14 @@ def generate_password():
 
 
 class Customer(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     date_of_birth = models.DateField(verbose_name=_("Date of Birth"), null=True)
     address = models.CharField(max_length=255, verbose_name=_("Address"), null=True)
     phone_number = models.CharField(max_length=20, verbose_name=_("Phone Number"), null=True)
     registration_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("Registration Date"), null=True
-    )
-    active_membership = models.BooleanField(
-        default=False, verbose_name=_("Active Membership"), null=True
-    )
-    membership_start_date = models.DateField(
-        null=True, blank=True, verbose_name=_("Membership Start Date"),
-    )
-    membership_end_date = models.DateField(
-        null=True, blank=True, verbose_name=_("Membership End Date")
     )
     notes = models.TextField(blank=True, verbose_name=_("Notes"), null=True)
     profile_picture = models.ImageField(
@@ -85,6 +83,9 @@ class Customer(AbstractUser):
 
 
 class Payment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name="payments", verbose_name=_("Customer")
     )
@@ -107,20 +108,18 @@ class Payment(models.Model):
     paid_month = models.PositiveIntegerField(verbose_name=_('Paid Month'), choices=PAID_MONTH_CHOICES)
     paid_year = models.PositiveIntegerField(verbose_name=_('Paid Year'), choices=PAID_YEAR_CHOICES)
 
-    def __str__(self):
-        return f"Pago {self.user.first_name} {self.user.last_name} - {self.date}"
-
     class Meta:
         verbose_name = _("Payment")
         verbose_name_plural = _("Payments")
 
 
 class Message(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     sender = models.ForeignKey(Customer, related_name='sent_messages', on_delete=models.CASCADE, null=True)
     receiver = models.ForeignKey(Customer, related_name='received_messages', on_delete=models.CASCADE, null=True)
     subject = models.CharField(max_length=2048, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
     is_draft = models.BooleanField(default=True)
     sent_at = models.DateTimeField(null=True, auto_now_add=False, blank=True)
     read_at = models.DateTimeField(null=True, blank=True)
@@ -131,11 +130,125 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['created_at']
+        verbose_name = _("Message")
+        verbose_name_plural = _("Messages")
 
 
 class MessageContent(models.Model):
-    text = models.TextField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    text = models.TextField()
     is_html = models.BooleanField(default=False)
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
+
+
+class Gym(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, verbose_name=_("Gym Name"))
+    address = models.CharField(max_length=255, verbose_name=_("Gym Address"))
+    group = models.ForeignKey('auth.Group', on_delete=models.SET_NULL, null=True, related_name='gyms')
+    customers = models.ManyToManyField('Customer', through='GymMembership', related_name='gyms')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Gym")
+        verbose_name_plural = _("Gyms")
+
+
+class GymMembership(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    gym = models.ForeignKey('Gym', on_delete=models.CASCADE)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.customer} membership at {self.gym}"
+
+    class Meta:
+        verbose_name = _("Gym Membership")
+        verbose_name_plural = _("Gym Memberships")
+
+
+class Room(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("Room")
+        verbose_name_plural = _("Rooms")
+
+
+class Course(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    duration = models.DurationField()
+    max_participants = models.PositiveIntegerField()
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
+    trainer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, limit_choices_to={'is_staff': True})
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Course")
+        verbose_name_plural = _("Courses")
+
+
+class CourseSchedule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    day_of_week = models.IntegerField(choices=[(i, calendar.day_name[i]) for i in range(7)]) # 0-Monday, 6-Sunday
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Course Schedule")
+        verbose_name_plural = _("Course Schedules")
+
+
+class CourseInstance(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course_schedule = models.ForeignKey(CourseSchedule, on_delete=models.CASCADE)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Course Instance")
+        verbose_name_plural = _("Course Instances")
+
+
+class Reservation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(CourseSchedule, on_delete=models.CASCADE)
+    date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Reservation")
+        verbose_name_plural = _("Reservations")
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(date__gte=datetime.date.today()),
+                name='date_not_in_past'
+            )
+        ]
